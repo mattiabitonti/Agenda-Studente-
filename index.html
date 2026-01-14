@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>📘 Agenda Studente 👨🏼‍🎓</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -29,6 +30,7 @@
         <button id="logout" style="float:right;background:#d9534f;">Esci</button>
       </div>
 
+      <!-- ORARIO -->
       <section id="orario" class="tab-content active">
         <h2>Orario scolastico</h2>
         <table id="tabellaOrario">
@@ -47,9 +49,11 @@
         <button onclick="salvaOrario()">💾 Salva orario</button>
       </section>
 
+      <!-- COMPITI -->
       <section id="compiti" class="tab-content">
         <h2>Compiti</h2>
         <form id="formCompiti">
+
           <select id="materiaCompiti">
             <option value="">Materia...</option>
             <option>Italiano</option>
@@ -59,15 +63,18 @@
             <option>Educazione fisica</option>
             <option>Religione</option>
           </select>
+
           <input type="text" id="compito" placeholder="Descrizione compito...">
           <button type="submit">➕ Aggiungi</button>
         </form>
         <ul id="listaCompiti"></ul>
       </section>
 
+      <!-- APPUNTI -->
       <section id="appunti" class="tab-content">
         <h2>Appunti</h2>
         <form id="formAppunti">
+
           <select id="materiaAppunti">
             <option value="">Materia...</option>
             <option>Italiano</option>
@@ -77,6 +84,7 @@
             <option>Educazione fisica</option>
             <option>Religione</option>
           </select>
+
           <input type="text" id="appunto" placeholder="Aggiungi un appunto...">
           <button type="submit">💾 Salva</button>
         </form>
@@ -91,5 +99,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
