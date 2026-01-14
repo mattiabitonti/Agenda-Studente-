@@ -1,3 +1,5 @@
+// script.js - estratto dal file originale
+
 const loginDiv = document.getElementById("login");
 const agendaDiv = document.getElementById("agenda");
 const savedUser = localStorage.getItem("utente");
@@ -34,8 +36,7 @@ document.querySelectorAll(".tab-buttons button[data-tab]").forEach(btn => {
 const tbody = document.querySelector("#tabellaOrario tbody");
 for (let ora = 1; ora <= 6; ora++) {
   const riga = document.createElement("tr");
-  riga.innerHTML =
-    `<th>${ora}ª ora</th>` +
+  riga.innerHTML = `<th>${ora}ª ora</th>` +
     Array(5).fill(0)
       .map((_, i) => `<td><input type="text" id="cell-${ora}-${i+1}" placeholder="Materia..."></td>`)
       .join("");
