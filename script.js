@@ -1,18 +1,19 @@
 const loginDiv = document.getElementById("login");
 const agendaDiv = document.getElementById("agenda");
+const savedUser = localStorage.getItem("utente");
 
-if (localStorage.getItem("utente")) mostraAgenda();
+if (savedUser) mostraAgenda();
 
 document.getElementById("loginBtn").onclick = () => {
-  const u = username.value.trim();
-  const p = password.value.trim();
-  if (!u || !p) return alert("Inserisci dati");
-  localStorage.setItem("utente", u);
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  if (!user || !pass) return alert("Inserisci utente e password!");
+  localStorage.setItem("utente", user);
   mostraAgenda();
 };
 
 document.getElementById("logout").onclick = () => {
-  localStorage.clear();
+  localStorage.removeItem("utente");
   location.reload();
 };
 
@@ -21,69 +22,99 @@ function mostraAgenda() {
   agendaDiv.style.display = "block";
 }
 
-document.querySelectorAll("[data-tab]").forEach(btn => {
+document.querySelectorAll(".tab-buttons button[data-tab]").forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-buttons button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
+    btn.classList.add("active");
     document.getElementById(btn.dataset.tab).classList.add("active");
   };
 });
 
 const tbody = document.querySelector("#tabellaOrario tbody");
-for (let i = 1; i <= 6; i++) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `<th>${i}ª</th>` +
-    Array(5).fill(0).map((_,j) =>
-      `<td><input id="c-${i}-${j}"></td>`).join("");
-  tbody.appendChild(tr);
+for (let ora = 1; ora <= 6; ora++) {
+  const riga = document.createElement("tr");
+  riga.innerHTML =
+    `<th>${ora}ª ora</th>` +
+    Array(5).fill(0)
+      .map((_, i) => `<td><input type="text" id="cell-${ora}-${i+1}" placeholder="Materia..."></td>`)
+      .join("");
+  tbody.appendChild(riga);
 }
 
 function salvaOrario() {
-  const data = {};
-  document.querySelectorAll("input[id^='c-']").forEach(i => data[i.id] = i.value);
-  localStorage.setItem("orario", JSON.stringify(data));
-  alert("Salvato!");
+  const orario = {};
+  document.querySelectorAll("#tabellaOrario input").forEach(c => orario[c.id] = c.value);
+  localStorage.setItem("orario", JSON.stringify(orario));
+  alert("✅ Orario salvato!");
 }
 
 function caricaOrario() {
-  const d = JSON.parse(localStorage.getItem("orario") || "{}");
-  Object.entries(d).forEach(([k,v]) => {
-    const el = document.getElementById(k);
-    if (el) el.value = v;
+  const dati = JSON.parse(localStorage.getItem("orario") || "{}");
+  Object.entries(dati).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
   });
 }
 
-function lista(form, input, lista, key, materia) {
-  let items = JSON.parse(localStorage.getItem(key) || "[]");
+function gestisciLista(formId, textId, listaId, storageKey, materiaId) {
 
-  const render = () => {
-    lista.innerHTML = items.map((o,i)=>`
+  const form = document.getElementById(formId);
+  const input = document.getElementById(textId);
+  const materiaSel = document.getElementById(materiaId);
+  const lista = document.getElementById(listaId);
+
+  let items = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+  const aggiornaLista = () => {
+    lista.innerHTML = items.map((obj, i) => `
       <li>
-        <b>${o.m}</b> - ${o.t}
-        <button class="delete-btn" onclick="del(${i},'${key}')">🗑</button>
-      </li>`).join("");
+        <span class="materia-tag">${obj.materia}</span>
+        <span class="descrizione">${obj.testo}</span>
+        <button class="delete-btn" onclick="rimuoviItem(${i}, '${storageKey}', '${listaId}')">🗑️</button>
+      </li>
+    `).join("");
   };
+
+  const salva = () => localStorage.setItem(storageKey, JSON.stringify(items));
 
   form.onsubmit = e => {
     e.preventDefault();
-    if (!materia.value || !input.value) return;
-    items.push({m:materia.value,t:input.value});
-    localStorage.setItem(key, JSON.stringify(items));
-    render();
+
+    const mat = materiaSel.value.trim();
+    const txt = input.value.trim();
+
+    if (!mat || !txt) return alert("Inserisci materia e testo!");
+
+    items.push({ materia: mat, testo: txt });
+    salva();
+    aggiornaLista();
     form.reset();
   };
 
-  render();
+  aggiornaLista();
 }
 
-window.del = (i,key)=>{
-  const items = JSON.parse(localStorage.getItem(key));
-  items.splice(i,1);
-  localStorage.setItem(key,JSON.stringify(items));
-  location.reload();
+window.rimuoviItem = (i, storageKey, listaId) => {
+  if (!confirm("Eliminare questo elemento?")) return;
+
+  let items = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  items.splice(i, 1);
+
+  localStorage.setItem(storageKey, JSON.stringify(items));
+
+  const lista = document.getElementById(listaId);
+  lista.innerHTML = items.map((obj, j) => `
+    <li>
+      <span class="materia-tag">${obj.materia}</span>
+      <span class="descrizione">${obj.testo}</span>
+      <button class="delete-btn" onclick="rimuoviItem(${j}, '${storageKey}', '${listaId}')">🗑️</button>
+    </li>
+  `).join("");
 };
 
 window.onload = () => {
   caricaOrario();
-  lista(formCompiti, compito, listaCompiti, "compiti", materiaCompiti);
-  lista(formAppunti, appunto, listaAppunti, "appunti", materiaAppunti);
+  gestisciLista("formCompiti","compito","listaCompiti","compiti","materiaCompiti");
+  gestisciLista("formAppunti","appunto","listaAppunti","appunti","materiaAppunti");
 };
