@@ -1,0 +1,102 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f6f8fa;
+  margin: 0;
+}
+
+header {
+  background-color: #0565d3;
+  color: white;
+  padding: 1em;
+  text-align: center;
+  border-radius: 12px;
+}
+
+main {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3571ad;
+}
+
+.logout {
+  background: #d9534f;
+  float: right;
+}
+
+.tab-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button.active {
+  background-color: #3571ad;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #f7faff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
