@@ -1,33 +1,68 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>📘 Agenda Studente 👨🏼‍🎓</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Agenda Studente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Supabase JS (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
   <main>
     <section id="header">
-      <header><h1>📘 Agenda Studente 👨🏼‍🎓</h1></header>
+      <header><h1>Agenda Studente</h1></header>
     </section>
 
-    <section id="login">
-      <h2>BENVENUTO 👋</h2>
-      <p>Accedi per visualizzare l'agenda</p>
-      <input type="text" id="username" placeholder="Nome utente">
-      <input type="password" id="password" placeholder="Password">
-      <button id="loginBtn">Entra</button>
+    <!-- AUTH -->
+    <section id="auth">
+      <h2>Accesso</h2>
+
+      <div class="auth-grid">
+        <div class="auth-card">
+          <h3>Login</h3>
+          <input type="email" id="loginEmail" placeholder="Email" autocomplete="email" />
+          <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+          <button id="loginBtn">Entra</button>
+          <button id="logoutBtn" style="display:none;background:#d9534f;">Esci</button>
+
+          <div class="small">
+            <a href="#" id="forgotPasswordLink">Password dimenticata?</a>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <h3>Registrazione</h3>
+          <input type="email" id="signupEmail" placeholder="Email" autocomplete="email" />
+          <input type="password" id="signupPassword" placeholder="Password (min 6)" autocomplete="new-password" />
+          <button id="signupBtn">Registrati</button>
+
+          <p class="small">
+            Dopo la registrazione riceverai una email di verifica.
+          </p>
+        </div>
+      </div>
+
+      <div id="authStatus" class="status"></div>
     </section>
 
+    <!-- AGENDA -->
     <section id="agenda" style="display:none;">
+      <div class="userbar">
+        <div>
+          <strong>Utente:</strong> <span id="userEmail"></span>
+        </div>
+        <div>
+          <button id="logoutBtn2" style="background:#d9534f;">Esci</button>
+        </div>
+      </div>
 
       <div class="tab-buttons">
         <button data-tab="orario" class="active">Orario</button>
         <button data-tab="compiti">Compiti</button>
         <button data-tab="appunti">Appunti</button>
-        <button id="logout" style="float:right;background:#d9534f;">Esci</button>
       </div>
 
       <!-- ORARIO -->
@@ -46,14 +81,13 @@
           </thead>
           <tbody></tbody>
         </table>
-        <button onclick="salvaOrario()">💾 Salva orario</button>
+        <button id="saveTimetableBtn">Salva orario</button>
       </section>
 
       <!-- COMPITI -->
       <section id="compiti" class="tab-content">
         <h2>Compiti</h2>
         <form id="formCompiti">
-
           <select id="materiaCompiti">
             <option value="">Materia...</option>
             <option>Italiano</option>
@@ -64,9 +98,10 @@
             <option>Religione</option>
           </select>
 
-          <input type="text" id="compito" placeholder="Descrizione compito...">
-          <button type="submit">➕ Aggiungi</button>
+          <input type="text" id="compito" placeholder="Descrizione compito..." />
+          <button type="submit">Aggiungi</button>
         </form>
+
         <ul id="listaCompiti"></ul>
       </section>
 
@@ -74,7 +109,6 @@
       <section id="appunti" class="tab-content">
         <h2>Appunti</h2>
         <form id="formAppunti">
-
           <select id="materiaAppunti">
             <option value="">Materia...</option>
             <option>Italiano</option>
@@ -85,16 +119,16 @@
             <option>Religione</option>
           </select>
 
-          <input type="text" id="appunto" placeholder="Aggiungi un appunto...">
-          <button type="submit">💾 Salva</button>
+          <input type="text" id="appunto" placeholder="Aggiungi un appunto..." />
+          <button type="submit">Salva</button>
         </form>
+
         <ul id="listaAppunti"></ul>
       </section>
-
     </section>
   </main>
 
-  <footer><p>© 2025 - Agenda Studente Locale</p></footer>
+  <footer><p>© 2026 - Agenda Studente</p></footer>
 
   <script src="script.js"></script>
 </body>
